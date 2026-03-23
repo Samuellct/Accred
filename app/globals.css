@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  /* palette charte "Crème & intime" */
+  --color-noir: #1A1714;
+  --color-parchemin: #F7F4EE;
+  --color-creme: #EDE8DC;
+  --color-creme-f: #E4DECE;
+  --color-brun: #3D342A;
+  --color-or: #A67C3D;
+  --color-or-chaud: #C9985A;
+  --color-gris-c: #8C8070;
+
+  /* typo */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'DM Sans', sans-serif;
+
+  /* transitions */
+  --transition-fast: 0.15s;
+}
+
+/* reset border-radius -- charte : coins francs partout */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}
+
+/* exception : cercles explicites (logo dot, avatars) */
+.rounded-full {
+  border-radius: 50% !important;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
