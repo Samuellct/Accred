@@ -1,22 +1,22 @@
+import "dotenv/config";
+import { hash } from "bcryptjs";
 import { db } from "./index";
 import { users, festivals } from "./schema";
-
-// placeholder hash -- sera remplacé en Phase 3 par bcrypt
-const PLACEHOLDER_HASH = "changeme";
 
 async function seed() {
   console.log("seeding...");
 
-  // user admin (id=1, toujours 1 en V1)
+  const password = process.env.AUTH_PASSWORD ?? "admin";
+  const passwordHash = await hash(password, 12);
+
   await db
     .insert(users)
     .values({
       email: "admin@accred.local",
-      passwordHash: PLACEHOLDER_HASH,
+      passwordHash,
     })
     .onConflictDoNothing();
 
-  // festival de test
   await db
     .insert(festivals)
     .values({
