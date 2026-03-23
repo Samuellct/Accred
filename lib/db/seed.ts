@@ -9,13 +9,17 @@ async function seed() {
   const password = process.env.AUTH_PASSWORD ?? "admin";
   const passwordHash = await hash(password, 12);
 
+  // onConflictDoUpdate pour toujours rafraichir le hash si le user existe deja
   await db
     .insert(users)
     .values({
       email: "admin@accred.local",
       passwordHash,
     })
-    .onConflictDoNothing();
+    .onConflictDoUpdate({
+      target: users.email,
+      set: { passwordHash },
+    });
 
   await db
     .insert(festivals)
