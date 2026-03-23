@@ -21,3 +21,4 @@
 !next-env.d.ts
 !vitest.config.ts
 !.env.example
+!drizzle/
