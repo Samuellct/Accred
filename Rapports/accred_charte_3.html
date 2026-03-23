@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accred - Charte 3 : Crème & intime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --creme:     #EDE8DC;
+    --creme-f:   #E4DECE;
+    --parchemin: #F7F4EE;
+    --noir:      #1A1714;
+    --brun:      #3D342A;
+    --or:        #A67C3D;
+    --or-chaud:  #C9985A;
+    --gris-c:    #8C8070;
+
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans:  'DM Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--creme-f);
+    font-family: var(--sans);
+    color: var(--noir);
+    padding: 3rem 2rem;
+    min-height: 100vh;
+  }
+
+  .label-charte {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gris-c);
+    margin-bottom: 3rem;
+  }
+
+  .board {
+    background: var(--parchemin);
+    max-width: 820px;
+    margin: 0 auto;
+    border: 1px solid rgba(166,124,61,0.2);
+    box-shadow: 0 2px 20px rgba(26,23,20,0.06);
+  }
+
+  /* ── Logo ─────────────────────────────────────────────────── */
+  .section-logo {
+    padding: 3.5rem 4rem 3rem;
+    border-bottom: 1px solid rgba(166,124,61,0.2);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .logo-primary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .logo-eyebrow {
+    font-family: var(--sans);
+    font-size: 0.55rem;
+    font-weight: 400;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--or);
+  }
+
+  .logo-word {
+    font-family: var(--serif);
+    font-size: 3.8rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--noir);
+    line-height: 1;
+  }
+
+  .logo-desc {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gris-c);
+  }
+
+  .logo-variants {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: flex-end;
+  }
+
+  .logo-compact {
+    background: var(--noir);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .logo-compact-word {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: var(--parchemin);
+  }
+
+  .logo-compact-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--or-chaud);
+    flex-shrink: 0;
+    margin-bottom: 2px;
+  }
+
+  .logo-stamp {
+    border: 1.5px solid var(--or);
+    padding: 0.6rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  .logo-stamp-word {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: var(--or);
+  }
+
+  .logo-stamp-line {
+    width: 100%;
+    height: 0.5px;
+    background: var(--or);
+    opacity: 0.4;
+  }
+
+  .logo-stamp-sub {
+    font-family: var(--sans);
+    font-size: 0.45rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--or);
+  }
+
+  /* ── Palette ─────────────────────────────────────────────── */
+  .section-palette {
+    padding: 2rem 4rem;
+    border-bottom: 1px solid rgba(166,124,61,0.2);
+  }
+
+  .section-label {
+    font-family: var(--sans);
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--or);
+    margin-bottom: 1.2rem;
+  }
+
+  .palette-swatches {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .swatch-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid rgba(166,124,61,0.15);
+  }
+
+  .swatch-info {
+    text-align: center;
+  }
+
+  .swatch-name {
+    font-family: var(--sans);
+    font-size: 0.5rem;
+    font-weight: 400;
+    color: var(--brun);
+    display: block;
+  }
+
+  .swatch-hex {
+    font-family: var(--sans);
+    font-size: 0.45rem;
+    font-weight: 300;
+    color: var(--gris-c);
+    display: block;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Typographie ─────────────────────────────────────────── */
+  .section-typo {
+    padding: 2.5rem 4rem;
+    border-bottom: 1px solid rgba(166,124,61,0.2);
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+  }
+
+  .typo-col { display: flex; flex-direction: column; gap: 1rem; }
+
+  .typo-eyebrow {
+    font-family: var(--sans);
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--or);
+  }
+
+  .typo-h1 {
+    font-family: var(--serif);
+    font-size: 2.6rem;
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--noir);
+    letter-spacing: 0.02em;
+  }
+
+  .typo-h1-italic {
+    font-family: var(--serif);
+    font-size: 2.6rem;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.1;
+    color: var(--or);
+    letter-spacing: 0.02em;
+  }
+
+  .typo-h2 {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--brun);
+    letter-spacing: 0.02em;
+    font-style: italic;
+  }
+
+  .typo-body {
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--brun);
+  }
+
+  .typo-caption {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gris-c);
+  }
+
+  /* ── Composants UI ───────────────────────────────────────── */
+  .section-ui {
+    padding: 2.5rem 4rem 3rem;
+  }
+
+  /* Nav */
+  .nav-demo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(166,124,61,0.2);
+    margin-bottom: 2rem;
+  }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: var(--noir);
+  }
+
+  .nav-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--or-chaud);
+    display: inline-block;
+    margin-left: 2px;
+    margin-bottom: 6px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .nav-link {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gris-c);
+    text-decoration: none;
+    transition: color 0.15s;
+    position: relative;
+    padding-bottom: 0.2rem;
+  }
+  .nav-link:hover { color: var(--brun); }
+  .nav-link.active {
+    color: var(--noir);
+    font-weight: 500;
+  }
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--or);
+  }
+
+  .nav-festival-badge {
+    font-family: var(--sans);
+    font-size: 0.5rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--or);
+    border: 1px solid rgba(166,124,61,0.4);
+    padding: 0.25rem 0.7rem;
+  }
+
+  /* Boutons */
+  .btns-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  .btn-p {
+    background: var(--noir);
+    color: var(--parchemin);
+    border: none;
+    padding: 0.75rem 1.8rem;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-p:hover { background: var(--brun); }
+
+  .btn-s {
+    background: transparent;
+    color: var(--brun);
+    border: 1px solid rgba(61,52,42,0.3);
+    padding: 0.75rem 1.8rem;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-s:hover { border-color: var(--or); color: var(--or); }
+
+  .btn-t {
+    background: transparent;
+    color: var(--or);
+    border: none;
+    padding: 0.75rem 0;
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-bottom: 1px solid var(--or);
+    transition: opacity 0.15s;
+  }
+  .btn-t:hover { opacity: 0.7; }
+
+  /* Carte film - style carnet */
+  .film-card-journal {
+    background: var(--parchemin);
+    border: 1px solid rgba(166,124,61,0.25);
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    overflow: hidden;
+    box-shadow: 0 1px 6px rgba(26,23,20,0.04);
+  }
+
+  .fcard-poster {
+    background: linear-gradient(160deg, #2a2420 0%, #1a1714 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 0.8rem;
+    position: relative;
+    min-height: 160px;
+  }
+
+  .fcard-poster-or {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--or), var(--or-chaud), var(--or));
+  }
+
+  .fcard-poster-text {
+    font-family: var(--serif);
+    font-size: 0.5rem;
+    font-style: italic;
+    color: rgba(247,244,238,0.35);
+    letter-spacing: 0.1em;
+  }
+
+  .fcard-body {
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-left: 1px solid rgba(166,124,61,0.15);
+  }
+
+  .fcard-section {
+    font-family: var(--sans);
+    font-size: 0.5rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--or);
+  }
+
+  .fcard-title {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--noir);
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+  }
+
+  .fcard-title em {
+    font-style: italic;
+    color: var(--or-chaud);
+  }
+
+  .fcard-dir {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    font-weight: 300;
+    color: var(--gris-c);
+    letter-spacing: 0.08em;
+  }
+
+  .fcard-divider {
+    width: 2rem;
+    height: 0.5px;
+    background: rgba(166,124,61,0.4);
+    margin: 0.2rem 0;
+  }
+
+  .fcard-note {
+    font-family: var(--serif);
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--brun);
+    line-height: 1.5;
+    opacity: 0.85;
+  }
+
+  .fcard-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.2rem;
+  }
+
+  .fcard-tags {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .fcard-tag {
+    font-family: var(--sans);
+    font-size: 0.48rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gris-c);
+    border: 0.5px solid rgba(140,128,112,0.4);
+    padding: 0.2rem 0.45rem;
+  }
+
+  .fcard-tag.active {
+    background: var(--or);
+    color: var(--parchemin);
+    border-color: var(--or);
+  }
+
+  .fcard-date {
+    font-family: var(--sans);
+    font-size: 0.5rem;
+    font-weight: 300;
+    color: var(--gris-c);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Footer ──────────────────────────────────────────────── */
+  .board-footer {
+    background: var(--noir);
+    padding: 1.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(166,124,61,0.3);
+  }
+
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--parchemin);
+  }
+
+  .footer-dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--or-chaud);
+    margin-left: 3px;
+    margin-bottom: 5px;
+  }
+
+  .footer-tag {
+    font-family: var(--sans);
+    font-size: 0.55rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(166,124,61,0.7);
+  }
+</style>
+</head>
+<body>
+
+<p class="label-charte">Accred - Proposition 3 / Crème & intime</p>
+
+<div class="board">
+
+  <!-- Logo -->
+  <div class="section-logo">
+    <div class="logo-primary">
+      <div class="logo-eyebrow">Votre accréditation</div>
+      <div class="logo-word">Accred</div>
+      <div class="logo-desc">Compagnon de festival de cinéma</div>
+    </div>
+    <div class="logo-variants">
+      <div class="logo-compact">
+        <span class="logo-compact-word">Accred</span>
+        <span class="logo-compact-dot"></span>
+      </div>
+      <div class="logo-stamp">
+        <span class="logo-stamp-word">ACCRED</span>
+        <div class="logo-stamp-line"></div>
+        <span class="logo-stamp-sub">Festival · Cinéma</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Palette -->
+  <div class="section-palette">
+    <p class="section-label">Palette</p>
+    <div class="palette-swatches">
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#1A1714;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Noir fond</span>
+          <span class="swatch-hex">#1A1714</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#F7F4EE;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Parchemin</span>
+          <span class="swatch-hex">#F7F4EE</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#EDE8DC;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Crème</span>
+          <span class="swatch-hex">#EDE8DC</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#A67C3D;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Or doux</span>
+          <span class="swatch-hex">#A67C3D</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#C9985A;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Or chaud</span>
+          <span class="swatch-hex">#C9985A</span>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-circle" style="background:#3D342A;"></div>
+        <div class="swatch-info">
+          <span class="swatch-name">Brun texte</span>
+          <span class="swatch-hex">#3D342A</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Typo -->
+  <div class="section-typo">
+    <div class="typo-col">
+      <p class="typo-eyebrow">Titres - Playfair Display</p>
+      <div>
+        <span class="typo-h1">Festival</span>
+        <span class="typo-h1-italic"> de</span><br>
+        <span class="typo-h1">Cannes</span>
+      </div>
+      <div class="typo-h2">Sélection officielle 2025</div>
+    </div>
+    <div class="typo-col">
+      <p class="typo-eyebrow">Corps - DM Sans</p>
+      <p class="typo-body">
+        12 films vus en 8 jours. Une sélection construite
+        heure par heure, séance après séance.
+      </p>
+      <p class="typo-caption">Navigation · Labels · Métadonnées</p>
+    </div>
+  </div>
+
+  <!-- UI -->
+  <div class="section-ui">
+    <p class="section-label">Composants & navigation</p>
+
+    <div class="nav-demo">
+      <span class="nav-logo">Accred<span class="nav-dot"></span></span>
+      <nav class="nav-links">
+        <a class="nav-link active" href="#">Programme</a>
+        <a class="nav-link" href="#">Ma sélection</a>
+        <a class="nav-link" href="#">Journal</a>
+        <a class="nav-link" href="#">Archive</a>
+      </nav>
+      <span class="nav-festival-badge">Cannes 2025</span>
+    </div>
+
+    <div class="btns-row">
+      <button class="btn-p">Marquer comme vu</button>
+      <button class="btn-s">Ajouter à la sélection</button>
+      <button class="btn-t">Exporter vers Letterboxd</button>
+    </div>
+
+    <div class="film-card-journal">
+      <div class="fcard-poster">
+        <div class="fcard-poster-or"></div>
+        <span class="fcard-poster-text">Affiche</span>
+      </div>
+      <div class="fcard-body">
+        <div class="fcard-section">Sélection officielle · En Compétition</div>
+        <div class="fcard-title">La <em>Chimère</em></div>
+        <div class="fcard-dir">Alice Rohrwacher · Italie / France · 2h10</div>
+        <div class="fcard-divider"></div>
+        <div class="fcard-note">
+          "Un grand film, troublant et lumineux. La scène finale reste longtemps."
+        </div>
+        <div class="fcard-footer">
+          <div class="fcard-tags">
+            <span class="fcard-tag active">Vu ✓</span>
+            <span class="fcard-tag">★★★★☆</span>
+            <span class="fcard-tag">Drame</span>
+          </div>
+          <span class="fcard-date">14 mai · 21h30</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="board-footer">
+    <span class="footer-logo">Accred<span class="footer-dot"></span></span>
+    <span class="footer-tag">Votre accréditation cinéphile</span>
+  </div>
+
+</div>
+</body>
+</html>

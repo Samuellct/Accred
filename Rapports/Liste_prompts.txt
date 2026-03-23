@@ -1,0 +1,158 @@
+Nous allons commencer ce nouveau projet. L'idée est de construire un site web compagnon pour un participant à des festivals de cinéma. Le site web doit être développé en Mobile First pour faciliter au maximum son utilisation à tout moment avec son téléphone (le site devra juste adapter l'affichage pour le mode desktop). 
+- Le fichier "seance_spec_v2.md" est un résumé du travail initial permettant d'avoir une idée du projet. 
+- Le fichier "naming_study_v2.md" propose une étude améliorée pour trouver le nom du projet, mon choix se porte finalement sur "Accred".
+- Le fichier "accred_charte_3.html" propose une charte graphique préliminaire pour le projet.
+
+Voila plusieurs points préliminaires sur lesquels il faut encore travailler avant de démarrer l'implémentation:
+- j'ai crée le repo GitHub "Accred" (public) et je souhaite le connecter au projet (directement à la racine de ce dossier, voila pourquoi j'ai renommé ce dossier local en "Accred"), peux-tu t'en charger ? 
+- Créer un fichier readme basique juste pour présenter le but du projet rapidement (le fichier sera mis a jour complètement quand on aura une idée précise du scope de la V1).
+- Créer un fichier .gitignore, je souhaite appliquer la règle de tout exclure de base "/*" et ensuite ajouter des exceptions pour les fichiers et dossiers suivis. Je ne veux que aucun fichier relatif à la configuration de Claude Code ne se retrouve sur le repo GitHub (le Claude.md par exemple).
+- Créer un dossier "Rapports" et déplacer les fichiers "seance_spec_v2.md", "naming_study_v2.md" et "accred_charte_3.html" à l'intérieur. Ce dossier ne sera pas suivi.
+- Mettre en place des consignes de développement précises : 
+
+### Code
+- Zero marqueur IA dans les fichiers produits. Le projet doit paraitre 100% personnel.
+- Pas de Co-Authored-By dans les commits.
+- Pas de commentaires style IA (longues docstrings structurées, listes a puces dans les commentaires).
+- Pas de tirets cadratins, pas d'emojis décoratifs.
+- Commentaires en style naturel, informel, mix FR/EN, abbreviations.
+- Des commentaires debug/todo "humains" de temps en temps.
+- Commentaires du changelog courts, informels, en FR ou EN.
+
+### Structure
+- Code organise en modules clairs.
+- Pas de sur-abstraction : 3 lignes similaires valent mieux qu'une abstraction prématurée.
+- Configuration centralisée, pas de constantes magiques dans le code.
+
+### Tests
+- Prévoir un workflow CI/CD avec GitHub Actions : tests automatiques à chaque push ou pr (CI) et si les tests réussissent, création d'un tag dont le nom est généré à partir des commits (implique d'avoir des commit qui suivent la convention "conventional commits" + "semantic release") + mise à jour d'un fichier "CHANGELOG.md" automatiquement.
+
+### Documentation
+- Mettre a jour `docs/` au fil des phases.
+
+Si tu as des questions, n'hésite pas à les poser.
+##############################################################################################################################################
+Je souhaite commencer par faire le point sur le scope du projet pour la V1 tant du côté des fonctionnalités prévues que de la définition de l'environnement de travail avec mise en place d'un pipeline CI/CD solide et étude sur les meilleures options pour déployer le service en ligne. Je te demande de produire un fichier "Etude_préliminaire_1.md", stocké dans le dossier "Rapports", qui contiendra ces informations :
+- Rappel du contexte du projet
+- A partir des fichiers déjà présents dans le dossier rapport, dresser une liste complète des fonctionnalités intéressantes pour la V1. Cette V1 doit viser le standard production ready, les fonctionnalités majeures du projet doivent donc déjà êtres incluses
+- Faire l'ensemble des recherches approfondies pour lever chaque zone d'ombre du projet
+- Etude complète des options possibles pour déployer le projet sur internet à moindre frais (je suis un développeur français pour information). Je vais acheter le nom de domaine "Accred.fr" pour le projet.           
+##############################################################################################################################################
+Réponses à tes questions :
+
+1. Infrastructure : Impossible d'utiliser le serveur Jellyfin comme plateforme d'hébergement. Il faudra utiliser une autre solution.
+
+2. Import du programme : La majeure partie des festivals proposent une version de leur programme au format PDF. Sinon, le programme complet et disponible soit sur le site du festival soit sur la page de billetterie interne (festival de cannes). Je pourrais éventuellement ordonner le programme dans un fichier csv si nécessaire (template à étudier). La saisie manuelle reste importante si l'export du programme complet dans un fichier tier n'est pas possible.
+
+3. Téléphone et PWA : J'utilise un téléphone android, un Samsung galaxy S21.
+
+4. Design : Le fichier "accred_charte_3.html" est là pour dresser les grandes lignes de la charte graphique du projet. Côté UI, je n'ai aucune maquette à proposer, "accred_charte_3.html" propose une courte démo des interactions possibles avec la DA choisie mais l'idée globale est d'avoir un site web moderne, élégant et adapté à la navigation sur mobile avant tout (comme le site du festival de cannes qui est développé en mobile first).
+
+5. Letterboxd : J'utilise Letterboxd après chaque film vu. Pour l'instant, je n'ai aucune app compagnon dédié à l'expérience festival, je dois donc soit griffonner un brouillon d'avis après chaque séance dans mes notes soit ouvrir l'app Letterboxd à chaque fois. 
+
+6. Timeline : Le festival de Cannes 2026 est LE festival cible pour une première utilisation réelle d'Accred. Je m'attends à avoir une app parfaitement fonctionnel d'ici là. Ne commence pas à réduire la densité de la V1 maintenant que tu connais la deadline, je te rappelle qu'on va beaucoup plus vite dans le travail de développement avec ton aide, donc on est largement en mesure de fournir un projet "terminé" d'ici mi-mai.
+
+Mets à jour le fichier "Etude_preliminaire_1.md" et Claude.md (si nécessaire) avec ces réponses.
+
+N'hésite pas si tu as besoin d'autres informations, pose moi autant de questions que nécessaire.
+##############################################################################################################################################
+Mon avis sur les points soulevés :
+1. Bouton "Note" central dans la nav : Je valide le template proposé.
+2. La barre verticale or/rouge dans la vue Sélection pour matérialiser la timeline : Je valide le template proposé.
+3. Le poster en noir profond sur la fiche film, avec le titre en Playfair italic qui émerge du fond : Je valide le template proposé.
+4. Pas de border-radius sur les cards et boutons, dans l'esprit de la charte : Je valide le template proposé.
+
+Le site web mobile first que tu proposes semble être incroyable. J'aurais juste des précisions à te demander pour savoir si on est sur la même longueur d'onde :
+- Comment comptes tu adapter le site pour un affichage sur PC ? pour rappel, à terme, le projet est accessible via "acrred.fr"
+- Le mockup "mockup_ui_v1.html" que tu proposes est une vue du service une fois connecté à son espace personnel. Comment la phase d'authentification est gérée ?
+- La service a pour but de lister les festivals existants, un utilisateur connecté à son compte peut "ajouter" un festival à son "programme" et rentrer dans la phase de planification complète. En gros, selon moi, le mockup "mockup_ui_v1.html" représente la vue qu'on aurait en étant logué à son espace personnel et en ayant sélectionné le festival "Cannes 2026". Il faut pouvoir changer de festival assez facilement, peut-être juste en cliquant sur l'icone "Cannes 2026" qui serait en fait un bouton permettant de revenir à la selection du festival. Il faut prévoir toute la logique de sauvegarde des profils et des données pour chaque festival et chaque utilisateur. L'utilisateur aurait également la possibilité de supprimer un festival de sa liste de "suivis".
+
+Une fois qu'on sera d'accord sur ces points, nous pourrons commencer à réfléchir à la phase de développement d'une feuille de route d'implémentation pour la V1.
+##############################################################################################################################################
+Dernier point de travail initial, je veux m'assurer d'avoir un pipeline CI/CD solide. Je voudrais donc un pipeline où les commits sont fréquents, granulaires et respectent Conventional Commits, avec une CI qui s’exécute à chaque push (lint, build, tests) mais avec la possibilité de désactiver les tests via un flag dans le message de commit (ex: `[skip tests]`) en phase de développement initiale.
+
+Les tags et le changelog ne doivent pas être générés automatiquement à chaque commit, mais uniquement lors d’un déclenchement manuel (fin de phase de travail), en récupérant tous les commits depuis le dernier tag pour produire une version cohérente (semver) et un changelog propre. Etudier les possiblités pour que tu te charges **éventuellement** de ce déclenchement manuel à la fin d'une phase.
+
+j'ai update la node-version de 20 à 22 dans "ci.yml" et "release.yml".
+
+A la lecture de ce que je souhaite avoir, y'a t il des éléments à revoir ?                                                                                                                                                                                                                          
+##############################################################################################################################################
+Documents de travail initiaux :
+- Etude_preliminaire_1.md : Rapport présentant les orientation de travail pour la V1 et réponses à certaines questions
+- accred_charte_3.html : charte graphique du projet
+- mockup_ui_v1.html : mockup préliminaire du projet en version téléphone
+
+Je te demande de planifier la construction d'une TODO list d'implémentation pour la V1 en partant des informations contenus dans les documents de travail initiaux. Cette feuille de route doit être construite en une succession de "Phases" ou "d'Etapes", chacune d'entre elle devant être conçue pour être menée par Claude Code de manière précise et indépendante. A la fin de chaque phase de travail, prévoir une étape de test en local et une étape de push sur GitHub en appliquant strictement la convention "conventional commits". Le fichier "Etude_preliminaire_1.md présente clairement le pipeline CI/CD imaginé pour le projet.
+
+Je te demande enfin de faire un rappel des consignes de développement qu'il faudra respecter strictement.
+
+Cette TODO list d'implémentation sera stockée dans le fichier "TO_DO_V1.md", dans le dossier "Rapports".##############################################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
