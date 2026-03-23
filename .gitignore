@@ -1,0 +1,19 @@
+/*
+
+# projet
+!README.md
+!.gitignore
+!CHANGELOG.md
+!docs/
+!src/
+!public/
+!package.json
+!package-lock.json
+!tsconfig.json
+!next.config.ts
+!tailwind.config.ts
+!postcss.config.js
+!drizzle.config.ts
+!.github/
+!components.json
+!.releaserc.json
