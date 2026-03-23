@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
+import Header from "@/components/layout/Header";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -38,6 +39,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${playfair.variable} ${dmSans.variable}`}>
       <body className="bg-creme text-brun font-sans min-h-screen">
+        <Header />
         {children}
       </body>
     </html>
