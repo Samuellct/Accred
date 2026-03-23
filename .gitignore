@@ -1,19 +1,34 @@
-/*
+# next.js
+/.next/
+/out/
 
-# projet
-!README.md
-!.gitignore
-!CHANGELOG.md
-!docs/
-!src/
-!public/
-!package.json
-!package-lock.json
-!tsconfig.json
-!next.config.ts
-!tailwind.config.ts
-!postcss.config.js
-!drizzle.config.ts
-!.github/
-!components.json
-!.releaserc.json
+# deps
+/node_modules/
+
+# production
+/build
+
+# env
+.env
+.env.local
+.env.*.local
+
+# base de données locale
+/data/
+
+# posters TMDb téléchargés
+/public/posters/
+
+# debug
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# drizzle studio
+drizzle/meta/
