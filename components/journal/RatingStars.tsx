@@ -21,19 +21,19 @@ function Star({ fill, sizePx, id }: { fill: "full" | "half" | "empty"; sizePx: n
           </clipPath>
         </defs>
       )}
-      {/* contour vide */}
+      {/* contour vide -- variables Tailwind 4 avec prefixe --color- */}
       <path
         d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
         fill="none"
-        stroke="var(--gris-c)"
+        stroke="var(--color-gris-c)"
         strokeWidth="1.5"
       />
       {/* remplissage */}
       {(fill === "full" || fill === "half") && (
         <path
           d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-          fill="var(--or-chaud)"
-          stroke="var(--or-chaud)"
+          fill="var(--color-or-chaud)"
+          stroke="var(--color-or-chaud)"
           strokeWidth="1.5"
           clipPath={fill === "half" ? `url(#${clipId})` : undefined}
         />
