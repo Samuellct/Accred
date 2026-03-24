@@ -16,15 +16,21 @@ export async function GET(_req: NextRequest, { params }: Params) {
       festivalId: logs.festivalId,
       rating: logs.rating,
       text: logs.text,
+      longCritique: logs.longCritique,
+      letterboxdExported: logs.letterboxdExported,
       tags: logs.tags,
       seenAt: logs.seenAt,
       createdAt: logs.createdAt,
       film: {
         id: films.id,
         title: films.title,
+        originalTitle: films.originalTitle,
         director: films.director,
+        year: films.year,
         posterPath: films.posterPath,
         duration: films.duration,
+        genres: films.genres,
+        countries: films.countries,
       },
     })
     .from(logs)
@@ -42,11 +48,12 @@ export async function POST(req: NextRequest, { params }: Params) {
     filmId: number;
     rating?: number;
     text?: string;
+    longCritique?: string;
     tags?: string[];
     seenAt?: string;
   };
 
-  const { filmId, rating, text, tags, seenAt } = body;
+  const { filmId, rating, text, longCritique, tags, seenAt } = body;
 
   if (!filmId) {
     return NextResponse.json({ error: "filmId requis" }, { status: 400 });
@@ -64,6 +71,7 @@ export async function POST(req: NextRequest, { params }: Params) {
       festivalId,
       rating: rating ?? null,
       text: text ?? null,
+      longCritique: longCritique ?? null,
       tags: tags ? JSON.stringify(tags) : null,
       seenAt: seenAt ?? null,
     })
