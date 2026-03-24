@@ -19,6 +19,8 @@ interface LogEntry {
   filmId: number | null;
   rating: number | null;
   text: string | null;
+  longCritique: string | null;
+  letterboxdExported: number;
   tags: string | null;
   seenAt: string | null;
   createdAt: string;
@@ -45,6 +47,19 @@ function parseTags(json: string | null): string[] {
   try { return JSON.parse(json) as string[]; } catch { return []; }
 }
 
+async function downloadLetterboxd(festivalId: string, onDone: () => void) {
+  const res = await fetch(`/api/festivals/${festivalId}/export/letterboxd`);
+  if (!res.ok) return;
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "accred-letterboxd.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+  onDone();
+}
+
 export default function JournalPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -52,6 +67,7 @@ export default function JournalPage() {
   const [entries, setEntries] = useState<LogEntry[]>([]);
   const [unrated, setUnrated] = useState<{ filmId: number; film: Film }[]>([]);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -90,17 +106,40 @@ export default function JournalPage() {
 
   // grouper les entries par jour (seenAt ou createdAt)
   const days = Array.from(new Set(entries.map((e) => dateKey(e.seenAt ?? e.createdAt)))).sort().reverse();
+  const exportableCount = entries.filter((e) => e.letterboxdExported !== 1).length;
+
+  async function handleExport() {
+    setExporting(true);
+    await downloadLetterboxd(id, () => {
+      // re-charger les entries pour MAJ les badges "Exporte"
+      void fetch(`/api/festivals/${id}/journal`)
+        .then((r) => r.json())
+        .then((logs: LogEntry[]) => setEntries(logs))
+        .finally(() => setExporting(false));
+    });
+  }
 
   return (
     <div className="px-4 py-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-serif text-2xl text-brun">Journal</h2>
-        <button
-          onClick={() => router.push(`/festivals/${id}/journal/new`)}
-          className="text-xs uppercase tracking-widest text-or hover:opacity-70 transition-opacity duration-[0.15s]"
-        >
-          + Noter
-        </button>
+        <div className="flex items-center gap-3">
+          {exportableCount > 0 && (
+            <button
+              onClick={() => void handleExport()}
+              disabled={exporting}
+              className="text-xs uppercase tracking-widest text-gris-c hover:text-or transition-colors duration-[0.15s] disabled:opacity-50"
+            >
+              {exporting ? "Export..." : `Letterboxd (${exportableCount})`}
+            </button>
+          )}
+          <button
+            onClick={() => router.push(`/festivals/${id}/journal/new`)}
+            className="text-xs uppercase tracking-widest text-or hover:opacity-70 transition-opacity duration-[0.15s]"
+          >
+            + Noter
+          </button>
+        </div>
       </div>
 
       {/* section films non notes */}
@@ -161,7 +200,7 @@ export default function JournalPage() {
                 return (
                   <button
                     key={entry.id}
-                    onClick={() => router.push(`/festivals/${id}/journal/new?filmId=${entry.filmId}`)}
+                    onClick={() => router.push(`/festivals/${id}/journal/${entry.id}/edit`)}
                     className="w-full flex items-start gap-3 bg-parchemin border border-or/25 px-3 py-2.5 text-left hover:bg-creme transition-colors duration-[0.15s]"
                   >
                     {/* poster */}
@@ -205,6 +244,15 @@ export default function JournalPage() {
                       {entry.text && (
                         <p className="text-brun text-xs mt-1.5 leading-relaxed line-clamp-2">{entry.text}</p>
                       )}
+                      {/* indicateurs critique + exporte */}
+                      <div className="flex gap-2 mt-1">
+                        {entry.longCritique && (
+                          <span className="text-[0.5rem] uppercase tracking-widest text-or">Critique</span>
+                        )}
+                        {entry.letterboxdExported === 1 && (
+                          <span className="text-[0.5rem] uppercase tracking-widest text-gris-c">Exporte</span>
+                        )}
+                      </div>
                     </div>
                   </button>
                 );
