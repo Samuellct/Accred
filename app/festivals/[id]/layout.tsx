@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { festivals } from "@/lib/db/schema";
 import Sidebar from "@/components/layout/Sidebar";
 import BottomNav from "@/components/layout/BottomNav";
+import NextSeance from "@/components/festival/NextSeance";
 
 const statusLabel: Record<string, string> = {
   upcoming: "A venir",
@@ -46,6 +47,7 @@ export default async function FestivalLayout({
             {statusLabel[festival.status] ?? festival.status}
           </span>
         </div>
+        <NextSeance festivalId={festival.id} status={festival.status} />
         <main className="flex-1 pb-16 md:pb-0">
           {children}
         </main>
