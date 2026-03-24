@@ -8,6 +8,7 @@
 !app/
 !components/
 !public/
+public/posters/
 !package.json
 !package-lock.json
 !tsconfig.json

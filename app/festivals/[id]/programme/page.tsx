@@ -139,6 +139,7 @@ export default function ProgrammePage() {
       const selId = selectionsMap.get(seanceId);
       if (!selId) return;
       setSelectionsMap((prev) => { const next = new Map(prev); next.delete(seanceId); return next; });
+      setConflicts(null); // on deselectionne : on efface l'alerte conflit si elle etait visible
       try {
         await fetch(`/api/festivals/${id}/selections/${selId}`, { method: "DELETE" });
       } catch {

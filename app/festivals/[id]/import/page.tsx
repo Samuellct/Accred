@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { parseCSV } from "@/lib/importers/csv";
 import { parseJSON } from "@/lib/importers/json";
@@ -10,8 +10,9 @@ import Input from "@/components/ui/Input";
 import ImportPreview from "@/components/festival/ImportPreview";
 import ImportErrors from "@/components/festival/ImportErrors";
 import TMDbAutocomplete from "@/components/festival/TMDbAutocomplete";
+import ProgrammeManager from "@/components/festival/ProgrammeManager";
 
-type Tab = "csv" | "json" | "manuel";
+type Tab = "csv" | "json" | "manuel" | "seances";
 
 interface ImportResult {
   imported: number;
@@ -30,6 +31,9 @@ export default function ImportPage() {
   const [importing, setImporting] = useState(false);
   const [result, setResult] = useState<ImportResult | null>(null);
 
+  // salles connues du festival (pour autocompletion)
+  const [knownVenues, setKnownVenues] = useState<string[]>([]);
+
   // etats saisie manuelle
   const [filmTitle, setFilmTitle] = useState("");
   const [manualDate, setManualDate] = useState("");
@@ -42,6 +46,15 @@ export default function ImportPage() {
   const [manualLoading, setManualLoading] = useState(false);
   const [manualSuccess, setManualSuccess] = useState(false);
   const [selectedTmdbId, setSelectedTmdbId] = useState<number | null>(null);
+
+  // charger les salles connues depuis les seances existantes
+  useEffect(() => {
+    void fetch(`/api/festivals/${id}/seances`).then(async (r) => {
+      const data = await r.json() as { venue: string | null }[];
+      const venues = Array.from(new Set(data.map((s) => s.venue).filter(Boolean))) as string[];
+      setKnownVenues(venues);
+    });
+  }, [id]);
 
   function readFile(file: File, type: "csv" | "json") {
     const reader = new FileReader();
@@ -121,6 +134,7 @@ export default function ImportPage() {
     { key: "csv", label: "CSV" },
     { key: "json", label: "JSON" },
     { key: "manuel", label: "Saisie manuelle" },
+    { key: "seances", label: "Gerer les seances" },
   ];
 
   return (
@@ -255,14 +269,25 @@ export default function ImportPage() {
               onChange={(e) => setManualHeure(e.target.value)}
             />
           </div>
+          {/* datalist salles connues */}
+          <datalist id="venues-list">
+            {knownVenues.map((v) => <option key={v} value={v} />)}
+          </datalist>
+
           <div className="grid grid-cols-2 gap-4">
-            <Input
-              label="Salle"
-              id="salle"
-              value={manualSalle}
-              onChange={(e) => setManualSalle(e.target.value)}
-              placeholder="Grand Theatre Lumiere"
-            />
+            <div>
+              <label htmlFor="salle" className="text-xs uppercase tracking-widest text-gris-c mb-1.5 block">
+                Salle
+              </label>
+              <input
+                id="salle"
+                list="venues-list"
+                value={manualSalle}
+                onChange={(e) => setManualSalle(e.target.value)}
+                placeholder="Grand Theatre Lumiere"
+                className="w-full bg-parchemin border border-creme-f text-brun px-4 py-2.5 text-sm focus:border-or focus:outline-none transition-colors duration-[0.15s]"
+              />
+            </div>
             <Input
               label="Section"
               id="section"
@@ -314,6 +339,11 @@ export default function ImportPage() {
             </Button>
           </div>
         </form>
+      )}
+
+      {/* Gestion des seances */}
+      {tab === "seances" && (
+        <ProgrammeManager festivalId={id} />
       )}
 
       {/* Resume apres import */}

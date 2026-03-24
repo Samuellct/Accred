@@ -47,8 +47,8 @@ export default function SeanceCard({ seance, film, selected, onToggle, festivalI
 
   return (
     <div className="flex items-stretch bg-parchemin border border-or/25 shadow-sm overflow-hidden">
-      {/* mini poster */}
-      <div className="w-12 flex-shrink-0 bg-noir/10 relative">
+      {/* mini poster — hauteur explicite requise pour next/image fill */}
+      <div className="w-12 flex-shrink-0 bg-noir/10 relative" style={{ minHeight: "72px" }}>
         {film?.posterPath ? (
           <Image
             src={film.posterPath}
@@ -58,7 +58,7 @@ export default function SeanceCard({ seance, film, selected, onToggle, festivalI
             sizes="48px"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-noir/5 min-h-[72px]">
+          <div className="w-full h-full absolute inset-0 flex items-center justify-center bg-noir/5">
             <span className="text-gris-c text-[0.55rem]">?</span>
           </div>
         )}

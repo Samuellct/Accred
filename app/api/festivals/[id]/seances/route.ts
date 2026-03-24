@@ -59,9 +59,9 @@ export async function POST(req: NextRequest, { params }: Params) {
     );
   }
 
-  // find ou create le film
+  // find ou create le film (cherche aussi dans originalTitle — TMDb peut avoir change le titre en fr)
   let film = await db.query.films.findFirst({
-    where: sql`LOWER(${films.title}) = LOWER(${filmTitle})`,
+    where: sql`LOWER(${films.title}) = LOWER(${filmTitle}) OR LOWER(COALESCE(${films.originalTitle}, '')) = LOWER(${filmTitle})`,
   });
 
   if (!film) {

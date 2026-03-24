@@ -67,11 +67,21 @@ function toSeanceWithFilm(s: SelectionFull): SeanceWithFilm {
   };
 }
 
+const BUFFER_OPTIONS = [
+  { value: 0, label: "Aucune" },
+  { value: 10, label: "10 min" },
+  { value: 15, label: "15 min" },
+  { value: 20, label: "20 min" },
+  { value: 30, label: "30 min" },
+  { value: 45, label: "45 min" },
+];
+
 export default function SelectionPage() {
   const { id } = useParams<{ id: string }>();
 
   const [selections, setSelections] = useState<SelectionFull[]>([]);
   const [loading, setLoading] = useState(true);
+  const [bufferMinutes, setBufferMinutes] = useState(20);
   const [openPriority, setOpenPriority] = useState<number | null>(null); // selectionId
   const [conflictMap, setConflictMap] = useState<Map<number, boolean>>(new Map()); // seanceId -> en conflit
   const [swapConflicts, setSwapConflicts] = useState<{
@@ -86,28 +96,44 @@ export default function SelectionPage() {
     }[];
   } | null>(null);
 
-  async function loadSelections() {
+  async function loadSelections(buffer = bufferMinutes) {
     try {
-      const res = await fetch(`/api/festivals/${id}/selections`);
-      const data = await res.json() as SelectionFull[];
+      const [selectRes, bufRes] = await Promise.all([
+        fetch(`/api/festivals/${id}/selections`),
+        fetch("/api/settings?key=conflict_buffer_minutes"),
+      ]);
+      const data = await selectRes.json() as SelectionFull[];
+      const bufData = await bufRes.json() as { value: string | null };
+      const loadedBuffer = bufData.value ? parseInt(bufData.value, 10) : buffer;
+      if (!isNaN(loadedBuffer)) setBufferMinutes(loadedBuffer);
       setSelections(data);
-      computeConflicts(data);
+      computeConflicts(data, isNaN(loadedBuffer) ? buffer : loadedBuffer);
     } finally {
       setLoading(false);
     }
   }
 
+  async function handleBufferChange(val: number) {
+    setBufferMinutes(val);
+    await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: "conflict_buffer_minutes", value: String(val) }),
+    });
+    computeConflicts(selections, val);
+  }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { void loadSelections(); }, [id]);
 
-  function computeConflicts(data: SelectionFull[]) {
+  function computeConflicts(data: SelectionFull[], buffer = bufferMinutes) {
     const seancesData = data.map(toSeanceWithFilm);
     const conflicting = new Set<number>();
 
     for (const sel of data) {
       const seance = toSeanceWithFilm(sel);
       const others = seancesData.filter((s) => s.id !== seance.id);
-      const c = detectConflicts(seance, others, 20);
+      const c = detectConflicts(seance, others, buffer);
       if (c.length > 0) conflicting.add(seance.id);
     }
 
@@ -179,7 +205,7 @@ export default function SelectionPage() {
   return (
     <div className="px-4 py-4">
       {/* entete avec export ICS */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-start justify-between mb-4 gap-3 flex-wrap">
         <h2 className="font-serif text-2xl text-brun">Ma selection</h2>
         <Button
           variant="secondary"
@@ -188,6 +214,28 @@ export default function SelectionPage() {
         >
           Exporter ICS
         </Button>
+      </div>
+
+      {/* marge de deplacement */}
+      <div className="flex items-center gap-3 mb-5 pb-4 border-b border-creme-f">
+        <span className="text-xs text-gris-c uppercase tracking-widest flex-shrink-0">
+          Marge deplacement
+        </span>
+        <div className="flex gap-1 flex-wrap">
+          {BUFFER_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => void handleBufferChange(opt.value)}
+              className={`text-[0.6rem] uppercase tracking-widest px-2.5 py-1 border transition-colors duration-[0.15s] ${
+                bufferMinutes === opt.value
+                  ? "bg-or text-parchemin border-or"
+                  : "text-gris-c border-or/25 hover:border-or hover:text-or"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* swap conflict alert */}
@@ -214,18 +262,20 @@ export default function SelectionPage() {
               return (
                 <div key={sel.id} className="flex gap-0 mb-px">
                   {/* barre laterale statut */}
-                  <div className={`w-1 flex-shrink-0 ${isConflict ? "bg-or-chaud" : "bg-or"}`} />
+                  <div className={`w-1.5 flex-shrink-0 ${isConflict ? "bg-or-chaud" : "bg-or"}`} />
 
                   {/* contenu */}
-                  <div className="flex-1 bg-parchemin border border-or/25 border-l-0 px-3 py-2.5 flex items-start justify-between gap-2">
+                  <div className={`flex-1 border border-l-0 px-3 py-2.5 flex items-start justify-between gap-2 ${
+                    isConflict ? "bg-or-chaud/5 border-or-chaud/40" : "bg-parchemin border-or/25"
+                  }`}>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-or font-medium text-sm tabular-nums">
+                        <span className={`font-medium text-sm tabular-nums ${isConflict ? "text-or-chaud" : "text-or"}`}>
                           {formatTime(sel.seance.dateTime)}
                         </span>
                         {isConflict && (
-                          <span className="text-[0.6rem] uppercase tracking-widest text-or-chaud">
-                            Conflit
+                          <span className="text-[0.6rem] uppercase tracking-widest text-or-chaud font-medium">
+                            Conflit horaire
                           </span>
                         )}
                       </div>

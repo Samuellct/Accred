@@ -28,8 +28,9 @@ export async function POST(req: NextRequest, { params }: Params) {
 
     try {
       // find ou create film par titre (case-insensitive)
+      // on cherche aussi dans originalTitle car TMDb peut avoir change le titre principal en fr
       let film = await db.query.films.findFirst({
-        where: sql`LOWER(${films.title}) = LOWER(${row.titre})`,
+        where: sql`LOWER(${films.title}) = LOWER(${row.titre}) OR LOWER(COALESCE(${films.originalTitle}, '')) = LOWER(${row.titre})`,
       });
 
       if (!film) {
