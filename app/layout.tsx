@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
+import Script from "next/script";
 import Header from "@/components/layout/Header";
 import "./globals.css";
 
@@ -41,6 +42,9 @@ export default function RootLayout({
       <body className="bg-creme text-brun font-sans min-h-screen">
         <Header />
         {children}
+        <Script id="sw-register" strategy="afterInteractive">
+          {`if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js')`}
+        </Script>
       </body>
     </html>
   );
