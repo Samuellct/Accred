@@ -40,6 +40,13 @@ const IconStats = () => (
     <line x1="6" y1="20" x2="6" y2="14" />
   </svg>
 );
+const IconImport = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+    <polyline points="17 8 12 3 7 8" />
+    <line x1="12" y1="3" x2="12" y2="15" />
+  </svg>
+);
 
 export default function BottomNav({ festivalId }: Props) {
   const pathname = usePathname();
@@ -51,6 +58,7 @@ export default function BottomNav({ festivalId }: Props) {
     { href: `${base}/journal/new`, label: "Note", icon: <IconNote />, accent: true },
     { href: `${base}/journal`, label: "Journal", icon: <IconJournal /> },
     { href: `${base}/stats`, label: "Stats", icon: <IconStats /> },
+    { href: `${base}/import`, label: "Import", icon: <IconImport /> },
   ];
 
   function isActive(href: string) {
