@@ -42,6 +42,7 @@ export default function ProgrammeManager({ festivalId }: Props) {
   const [editDateTime, setEditDateTime] = useState("");
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { void load(); }, [festivalId]);
@@ -61,6 +62,17 @@ export default function ProgrammeManager({ festivalId }: Props) {
     if (!confirm(`Supprimer la seance de "${filmTitle}" ?`)) return;
     await fetch(`/api/festivals/${festivalId}/seances/${seanceId}`, { method: "DELETE" });
     setSeances((prev) => prev.filter((s) => s.id !== seanceId));
+  }
+
+  async function handleDeleteAll() {
+    if (!confirm(`Supprimer les ${seances.length} seances du programme ? Cette action est irreversible.`)) return;
+    setDeleting(true);
+    try {
+      await fetch(`/api/festivals/${festivalId}/seances`, { method: "DELETE" });
+      setSeances([]);
+    } finally {
+      setDeleting(false);
+    }
   }
 
   function startEdit(s: Seance) {
@@ -113,13 +125,22 @@ export default function ProgrammeManager({ festivalId }: Props) {
     <div>
       <div className="flex items-center justify-between mb-4 gap-3">
         <p className="text-gris-c text-xs">{seances.length} seance{seances.length > 1 ? "s" : ""} au programme</p>
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Filtrer..."
-          className="text-xs text-brun bg-parchemin border border-or/25 px-2 py-1.5 focus:outline-none focus:border-or w-40"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Filtrer..."
+            className="text-xs text-brun bg-parchemin border border-or/25 px-2 py-1.5 focus:outline-none focus:border-or w-32"
+          />
+          <button
+            onClick={() => void handleDeleteAll()}
+            disabled={deleting}
+            className="text-[0.6rem] uppercase tracking-widest text-gris-c hover:text-or-chaud border border-or/25 hover:border-or-chaud/50 px-2 py-1.5 transition-colors duration-[0.15s] whitespace-nowrap"
+          >
+            {deleting ? "..." : "Tout supprimer"}
+          </button>
+        </div>
       </div>
 
       <div className="space-y-px">

@@ -54,6 +54,7 @@ export default function SeanceCard({ seance, film, selected, onToggle, festivalI
             src={film.posterPath}
             alt={film.title}
             fill
+            unoptimized
             className="object-cover"
             sizes="48px"
           />

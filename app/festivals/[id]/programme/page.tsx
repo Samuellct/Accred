@@ -42,6 +42,15 @@ function dateKey(dateTime: string): string {
   return dateTime.slice(0, 10); // YYYY-MM-DD
 }
 
+const BUFFER_OPTIONS = [
+  { value: 0, label: "0" },
+  { value: 10, label: "10min" },
+  { value: 15, label: "15min" },
+  { value: 20, label: "20min" },
+  { value: 30, label: "30min" },
+  { value: 45, label: "45min" },
+];
+
 function formatDayLabel(dateStr: string): string {
   const d = new Date(dateStr + "T00:00");
   return d.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric" });
@@ -67,16 +76,20 @@ export default function ProgrammePage() {
   const [search, setSearch] = useState<string>("");
   const [conflicts, setConflicts] = useState<ConflictItem[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const [bufferMinutes, setBufferMinutes] = useState(20);
+  const [viewMode, setViewMode] = useState<"liste" | "grille">("liste");
 
   useEffect(() => {
     async function load() {
       try {
-        const [seancesRes, selectionsRes] = await Promise.all([
+        const [seancesRes, selectionsRes, bufRes] = await Promise.all([
           fetch(`/api/festivals/${id}/seances`),
           fetch(`/api/festivals/${id}/selections`),
+          fetch("/api/settings?key=conflict_buffer_minutes"),
         ]);
         const seancesData = await seancesRes.json() as Seance[];
         const selectionsData = await selectionsRes.json() as SelectionRow[];
+        const bufData = await bufRes.json() as { value: string | null };
 
         setSeances(seancesData);
 
@@ -88,12 +101,25 @@ export default function ProgrammePage() {
         if (seancesData.length > 0) {
           setActiveDay(dateKey(seancesData[0].dateTime));
         }
+        if (bufData.value) {
+          const b = parseInt(bufData.value, 10);
+          if (!isNaN(b)) setBufferMinutes(b);
+        }
       } finally {
         setLoading(false);
       }
     }
     void load();
   }, [id]);
+
+  async function handleBufferChange(val: number) {
+    setBufferMinutes(val);
+    await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: "conflict_buffer_minutes", value: String(val) }),
+    });
+  }
 
   // jours uniques triés
   const days = Array.from(new Set(seances.map((s) => dateKey(s.dateTime)))).sort();
@@ -276,39 +302,83 @@ export default function ProgrammePage() {
         />
       </div>
 
-      {/* grille desktop (cachee sur mobile) */}
-      <div className="hidden md:block border-b border-creme-f">
-        <ProgrammeGrid
-          seances={filtered}
-          selectedIds={selectedIds}
-          onToggle={handleToggle}
-          festivalId={id}
-        />
+      {/* marge deplacement + toggle vue */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2.5 bg-parchemin border-b border-creme-f">
+        <div className="flex items-center gap-2">
+          <span className="text-[0.6rem] uppercase tracking-widest text-gris-c flex-shrink-0">Marge</span>
+          <div className="flex gap-1">
+            {BUFFER_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => void handleBufferChange(opt.value)}
+                className={`text-[0.6rem] px-2 py-0.5 border transition-colors duration-[0.15s] ${
+                  bufferMinutes === opt.value
+                    ? "bg-or text-parchemin border-or"
+                    : "text-gris-c border-or/25 hover:border-or hover:text-or"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="ml-auto flex gap-1">
+          <button
+            onClick={() => setViewMode("liste")}
+            className={`text-[0.6rem] uppercase tracking-widest px-2 py-0.5 border transition-colors duration-[0.15s] ${
+              viewMode === "liste" ? "bg-or text-parchemin border-or" : "text-gris-c border-or/25 hover:text-or hover:border-or"
+            }`}
+          >
+            Liste
+          </button>
+          <button
+            onClick={() => setViewMode("grille")}
+            className={`text-[0.6rem] uppercase tracking-widest px-2 py-0.5 border transition-colors duration-[0.15s] ${
+              viewMode === "grille" ? "bg-or text-parchemin border-or" : "text-gris-c border-or/25 hover:text-or hover:border-or"
+            }`}
+          >
+            Grille
+          </button>
+        </div>
       </div>
 
-      {/* liste seances (mobile, cachee sur desktop) */}
-      <div className="md:hidden flex-1 px-4 py-4 space-y-4">
-        {groups.size === 0 && (
-          <p className="text-gris-c text-sm">Aucune seance pour ce filtre.</p>
-        )}
-        {Array.from(groups.entries()).map(([timeLabel, group]) => (
-          <div key={timeLabel}>
-            <div className="text-xs uppercase tracking-widest text-gris-c mb-2">{timeLabel}</div>
-            <div className="space-y-px">
-              {group.map((s) => (
-                <SeanceCard
-                  key={s.id}
-                  seance={s}
-                  film={s.film}
-                  selected={selectedIds.has(s.id)}
-                  onToggle={handleToggle}
-                  festivalId={id}
-                />
-              ))}
+      {/* grille (toggle) */}
+      {viewMode === "grille" && (
+        <div className="border-b border-creme-f overflow-x-auto">
+          <ProgrammeGrid
+            seances={filtered}
+            selectedIds={selectedIds}
+            onToggle={handleToggle}
+            festivalId={id}
+          />
+        </div>
+      )}
+
+      {/* liste seances */}
+      {viewMode === "liste" && (
+        <div className="flex-1 px-4 py-4 space-y-4">
+          {groups.size === 0 && (
+            <p className="text-gris-c text-sm">Aucune seance pour ce filtre.</p>
+          )}
+          {Array.from(groups.entries()).map(([timeLabel, group]) => (
+            <div key={timeLabel}>
+              <div className="text-xs uppercase tracking-widest text-gris-c mb-2">{timeLabel}</div>
+              <div className="space-y-px">
+                {group.map((s) => (
+                  <SeanceCard
+                    key={s.id}
+                    seance={s}
+                    film={s.film}
+                    selected={selectedIds.has(s.id)}
+                    onToggle={handleToggle}
+                    festivalId={id}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

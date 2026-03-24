@@ -152,6 +152,7 @@ export default function FilmDetailPage() {
               src={film.posterPath}
               alt={film.title}
               fill
+              unoptimized
               className="object-cover opacity-25"
               sizes="100vw"
             />
@@ -161,7 +162,7 @@ export default function FilmDetailPage() {
         <div className="relative z-10 px-4 pt-8 pb-6 flex gap-4 items-end">
           {film.posterPath && (
             <div className="flex-shrink-0 w-20 shadow-lg relative" style={{ height: "120px" }}>
-              <Image src={film.posterPath} alt={film.title} fill className="object-cover" sizes="80px" />
+              <Image src={film.posterPath} alt={film.title} fill unoptimized className="object-cover" sizes="80px" />
             </div>
           )}
           <div className="flex-1 min-w-0 pb-1">

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, sql, inArray } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { seances, films } from "@/lib/db/schema";
+import { seances, films, selections } from "@/lib/db/schema";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -78,4 +78,24 @@ export async function POST(req: NextRequest, { params }: Params) {
     .returning();
 
   return NextResponse.json({ ...seance, film }, { status: 201 });
+}
+
+// supprime toutes les seances du festival (et leurs selections)
+export async function DELETE(_req: NextRequest, { params }: Params) {
+  const { id } = await params;
+  const festivalId = Number(id);
+
+  // recup les ids des seances pour supprimer les selections en cascade
+  const seanceRows = await db
+    .select({ id: seances.id })
+    .from(seances)
+    .where(eq(seances.festivalId, festivalId));
+
+  if (seanceRows.length > 0) {
+    const seanceIds = seanceRows.map((s) => s.id);
+    await db.delete(selections).where(inArray(selections.seanceId, seanceIds));
+    await db.delete(seances).where(eq(seances.festivalId, festivalId));
+  }
+
+  return new NextResponse(null, { status: 204 });
 }

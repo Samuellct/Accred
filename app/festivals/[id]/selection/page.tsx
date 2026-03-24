@@ -67,15 +67,6 @@ function toSeanceWithFilm(s: SelectionFull): SeanceWithFilm {
   };
 }
 
-const BUFFER_OPTIONS = [
-  { value: 0, label: "Aucune" },
-  { value: 10, label: "10 min" },
-  { value: 15, label: "15 min" },
-  { value: 20, label: "20 min" },
-  { value: 30, label: "30 min" },
-  { value: 45, label: "45 min" },
-];
-
 export default function SelectionPage() {
   const { id } = useParams<{ id: string }>();
 
@@ -111,16 +102,6 @@ export default function SelectionPage() {
     } finally {
       setLoading(false);
     }
-  }
-
-  async function handleBufferChange(val: number) {
-    setBufferMinutes(val);
-    await fetch("/api/settings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ key: "conflict_buffer_minutes", value: String(val) }),
-    });
-    computeConflicts(selections, val);
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -214,28 +195,6 @@ export default function SelectionPage() {
         >
           Exporter ICS
         </Button>
-      </div>
-
-      {/* marge de deplacement */}
-      <div className="flex items-center gap-3 mb-5 pb-4 border-b border-creme-f">
-        <span className="text-xs text-gris-c uppercase tracking-widest flex-shrink-0">
-          Marge deplacement
-        </span>
-        <div className="flex gap-1 flex-wrap">
-          {BUFFER_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => void handleBufferChange(opt.value)}
-              className={`text-[0.6rem] uppercase tracking-widest px-2.5 py-1 border transition-colors duration-[0.15s] ${
-                bufferMinutes === opt.value
-                  ? "bg-or text-parchemin border-or"
-                  : "text-gris-c border-or/25 hover:border-or hover:text-or"
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* swap conflict alert */}
