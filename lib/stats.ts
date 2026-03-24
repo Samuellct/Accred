@@ -82,7 +82,6 @@ export function computeFestivalStats(
   // histogramme
   const histMap = new Map<string, number>(RATING_BUCKETS.map((b) => [b, 0]));
   for (const r of ratings) {
-    const key = String(r % 1 === 0 ? r : r); // ex: 3.5 -> "3.5", 4 -> "4"
     const bucket = RATING_BUCKETS.find((b) => Math.abs(Number(b) - r) < 0.01);
     if (bucket) histMap.set(bucket, (histMap.get(bucket) ?? 0) + 1);
   }
