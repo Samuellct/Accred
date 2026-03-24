@@ -1,0 +1,10 @@
+# Template import seances Accred
+# Separateur : point-virgule (;)
+# Encodage : UTF-8
+# Colonnes requises : titre, date, heure
+# Colonnes optionnelles : salle, section, duree (en minutes), format, notes
+# Les lignes commencant par # sont ignorees
+titre;date;heure;salle;section;duree;format;notes
+Anora;2026-05-13;10:00;Grand Theatre Lumiere;Competition;139;;
+The Substance;2026-05-14;18:30;Salle Debussy;Un Certain Regard;141;;Avant-premiere mondiale
+Emilia Perez;2026-05-15;22:00;Grand Theatre Lumiere;Seances Speciales;130;4DX;
