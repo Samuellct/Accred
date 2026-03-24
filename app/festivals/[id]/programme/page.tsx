@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import SeanceCard from "@/components/festival/SeanceCard";
 import ConflictAlert from "@/components/festival/ConflictAlert";
+import ProgrammeGrid from "@/components/festival/ProgrammeGrid";
 
 interface Film {
   id: number;
@@ -274,8 +275,18 @@ export default function ProgrammePage() {
         />
       </div>
 
-      {/* liste seances */}
-      <div className="flex-1 px-4 py-4 space-y-4">
+      {/* grille desktop (cachee sur mobile) */}
+      <div className="hidden md:block border-b border-creme-f">
+        <ProgrammeGrid
+          seances={filtered}
+          selectedIds={selectedIds}
+          onToggle={handleToggle}
+          festivalId={id}
+        />
+      </div>
+
+      {/* liste seances (mobile, cachee sur desktop) */}
+      <div className="md:hidden flex-1 px-4 py-4 space-y-4">
         {groups.size === 0 && (
           <p className="text-gris-c text-sm">Aucune seance pour ce filtre.</p>
         )}
