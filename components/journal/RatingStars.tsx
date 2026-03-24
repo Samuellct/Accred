@@ -27,7 +27,6 @@ function Star({ fill, sizePx, id }: { fill: "full" | "half" | "empty"; sizePx: n
         fill="none"
         stroke="var(--gris-c)"
         strokeWidth="1.5"
-        opacity="0.4"
       />
       {/* remplissage */}
       {(fill === "full" || fill === "half") && (

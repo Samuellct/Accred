@@ -40,29 +40,25 @@ const IconStats = () => (
     <line x1="6" y1="20" x2="6" y2="14" />
   </svg>
 );
-const IconImport = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-    <polyline points="17 8 12 3 7 8" />
-    <line x1="12" y1="3" x2="12" y2="15" />
-  </svg>
-);
 
 export default function BottomNav({ festivalId }: Props) {
   const pathname = usePathname();
   const base = `/festivals/${festivalId}`;
 
+  // 5 boutons max : Programme | Selection | Note (central) | Journal | Stats
+  // Import reste accessible via la sidebar desktop
   const items = [
     { href: `${base}/programme`, label: "Programme", icon: <IconProgramme /> },
     { href: `${base}/selection`, label: "Selection", icon: <IconSelection /> },
     { href: `${base}/journal/new`, label: "Note", icon: <IconNote />, accent: true },
     { href: `${base}/journal`, label: "Journal", icon: <IconJournal /> },
     { href: `${base}/stats`, label: "Stats", icon: <IconStats /> },
-    { href: `${base}/import`, label: "Import", icon: <IconImport /> },
   ];
 
   function isActive(href: string) {
-    if (href.endsWith("/journal/new")) return false; // jamais "actif" au sens nav
+    if (href.endsWith("/journal/new")) return false; // jamais "actif"
+    // journal : exact match pour ne pas matcher journal/new
+    if (href.endsWith("/journal")) return pathname === href;
     return pathname.startsWith(href);
   }
 
