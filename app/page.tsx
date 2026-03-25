@@ -45,6 +45,13 @@ export default async function Home() {
         </Link>
       </div>
 
+      {/* lien archive */}
+      <div className="mb-4 text-right">
+        <Link href="/archive" className="text-xs uppercase tracking-widest text-gris-c hover:text-or transition-colors duration-[0.15s]">
+          Voir les archives →
+        </Link>
+      </div>
+
       {rows.length === 0 ? (
         <div className="text-center py-16">
           <p className="text-gris-c text-sm mb-4">{"Aucun festival pour l'instant."}</p>
